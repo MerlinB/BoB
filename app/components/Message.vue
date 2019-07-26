@@ -1,46 +1,63 @@
 <template>
-    <Label :text="message.text" :class="[{'me': sendByMe}, 'message', 'speech-bubble']" textWrap="true"></Label>
+	<GridLayout columns="*" rows="auto" :class="[{'me': sendByMe, 'them': !sendByMe}, 'msg']">
+		<StackLayout orientation="horizontal" :horizontalAlignment="alignment">
+			<Image :visibility="visibility" stretch="aspectFill" height="30" class="authorimg" width="30" verticalAlignment="top" style="background-color: black;"></Image>
+			<Label :text="message.text" textWrap="true" class="msg_text" verticalAlignment="top"></Label>
+		</StackLayout>
+	</GridLayout>
 </template>
 
 <script>
 export default {
     computed: {
-        'sendByMe': function() {
+        sendByMe() {
             return this.message.sender === 'me'
-        }
+		},
+		alignment() {
+			if (this.sendByMe) {
+				return 'right';
+			} else {
+				return 'left';
+			}
+		},
+		visibility() {
+			if (this.sendByMe) {
+				return 'hidden';
+			} else {
+				return 'visible';
+			}
+		},
     },
     props: ['message']
 };
 </script>
 
 <style scoped>
-
-.message {
-    padding: 10;
+.msg {
+    font-size: 14;
+    padding: 5;
 }
 
-.me {
-    text-align: right;
+.me .msg_text {
+    background-color: #30A9FF;
+    color: white;
+    padding: 8;
+    margin-right: 10;
+    border-radius: 5;
 }
 
-.speech-bubble {
-	position: relative;
-	background: #dbdbdb;
-	border-radius: .4em;
+.them .msg_text {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 7;
+    border-radius: 5;
+    margin-right: 40;
 }
 
-.speech-bubble:after {
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 50%;
-	width: 0;
-	height: 0;
-	border: 12px solid transparent;
-	border-right-color: #dbdbdb;
-	border-left: 0;
-	margin-top: -12px;
-	margin-left: -12px;
+.authorimg {
+    margin: 0 5 5 5;
+    width: 30;
+    height: 30;
+    border-radius: 15;
 }
-
 </style>
