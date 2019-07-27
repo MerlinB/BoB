@@ -11,8 +11,30 @@
 
 <script>
     import Conversations from "./Conversations";
+    var SecureStorage = require("nativescript-secure-storage").SecureStorage;
+    var bsv = require('bsv');
+    import Mnemonic from "../mnemonic";
+
+    var secureStorage = new SecureStorage();
 
     export default {
+        created() {
+            var HDPrivKeyS = secureStorage.getSync({key: "HDPrivKey"})
+            if (HDPrivKeyS) {
+                HDPrivKey = bsv.HDPrivateKey.fromString(HDPrivKeyS)
+            } else {
+                var mnemonic = Mnemonic.fromRandom()
+                console.log(mnemonic.toString())
+                HDPrivKey = mnemonic.toHDPrivateKey()
+                secureStorage.setSync({
+                    key: "HDPrivKey",
+                    value: HDPrivKey.toString()
+                })
+            }
+            var HDPubKey = bsv.HDPublicKey.fromHDPrivateKey(HDPrivKey)
+            this.pubKey = HDPubKey.pubKey
+            console.log(this.pubKey)
+        },
         components: {'Conversations': Conversations}
     };
 </script>
