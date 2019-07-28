@@ -106,6 +106,8 @@ module.exports = env => {
             hashSalt
         },
         resolve: {
+            aliasFields: ["browser"],
+            mainFields: ['browser', 'module', 'main'],
             extensions: [".vue", ".ts", ".js", ".scss", ".css"],
             // Resolve {N} system modules from tns-core-modules
             modules: [
