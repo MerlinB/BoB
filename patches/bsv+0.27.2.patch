@@ -1,0 +1,20 @@
+diff --git a/node_modules/bsv/lib/crypto/random.js b/node_modules/bsv/lib/crypto/random.js
+index 3309335..6bebd04 100644
+--- a/node_modules/bsv/lib/crypto/random.js
++++ b/node_modules/bsv/lib/crypto/random.js
+@@ -1,11 +1,14 @@
+ 'use strict'
+ 
++var randomBytes = require('nativescript-randombytes');
++
+ function Random () {
+ }
+ 
+ /* secure random bytes that sometimes throws an error due to lack of entropy */
+ Random.getRandomBuffer = function (size) {
+-  if (process.browser) { return Random.getRandomBufferBrowser(size) } else { return Random.getRandomBufferNode(size) }
++  // if (process.browser) { return Random.getRandomBufferBrowser(size) } else { return Random.getRandomBufferNode(size) }
++  return randomBytes(size)
+ }
+ 
+ Random.getRandomBufferNode = function (size) {

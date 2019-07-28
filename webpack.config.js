@@ -14,6 +14,12 @@ const nativescriptTarget = require("nativescript-dev-webpack/nativescript-target
 const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
 const hashSalt = Date.now().toString();
 
+
+const nodeLibsBrowser = require('node-libs-browser')
+nodeLibsBrowser.assert = require.resolve('browser-assert')
+nodeLibsBrowser.util = require.resolve('util')
+
+
 module.exports = env => {
     // Add your custom Activities, Services and other android app components here.
     const appComponents = [
@@ -111,7 +117,9 @@ module.exports = env => {
             alias: {
                 '~': appFullPath,
                 '@': appFullPath,
-                'vue': 'nativescript-vue'
+                'vue': 'nativescript-vue',
+                'crypto': 'crypto-browserify',
+                "randombytes": "nativescript-randombytes"
             },
             // resolve symlinks to symlinked modules
             symlinks: true,
