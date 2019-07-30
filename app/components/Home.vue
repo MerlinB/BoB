@@ -2,6 +2,9 @@
     <Page class="page">
         <ActionBar class="action-bar">
             <Label class="action-bar-title" text="BOB"></Label>
+            <ActionItem @tap="showAddress"
+                ios.systemIcon="16" ios.position="right"
+                text="Show Address" android.position="popup"></ActionItem>
         </ActionBar>
 
         <Conversations>
@@ -10,36 +13,31 @@
 </template>
 
 <script>
-    global.process = require("process/browser");
-    global.window = {'crypto': require("crypto-browserify")}
-    // global.Buffer = require("buffer").Buffer;
-
     import Conversations from "./Conversations";
-    var SecureStorage = require("nativescript-secure-storage").SecureStorage;
+    import wallet from '../wallet'
 
-    var bsv = require('bsv');
-    var Mnemonic = require('bsv/mnemonic')
 
     export default {
-        created() {;
-
-            var secureStorage = new SecureStorage();
-
-            var HDPrivKeyS = secureStorage.getSync({key: "HDPrivKey"})
-            if (HDPrivKeyS) {
-                HDPrivKey = bsv.HDPrivateKey.fromString(HDPrivKeyS)
-            } else {
-                var mnemonic = Mnemonic.fromRandom()
-                console.log(mnemonic.toString())
-                var HDPrivKey = mnemonic.toHDPrivateKey()
-                secureStorage.setSync({
-                    key: "HDPrivKey",
-                    value: HDPrivKey.toString()
-                })
-                console.log('done')
+        data() {
+            return {
+                pubKey: ''
             }
-            var HDPubKey = bsv.HDPublicKey.fromHDPrivateKey(HDPrivKey)
-            console.log(HDPubKey.toString())
+        },
+        methods: {
+            showAddress() {
+                alert({
+                    title: "Address",
+                    message: wallet.getPubKey(),
+                });
+            }
+        },
+        created() {
+
+            if (!wallet.HDPrivKey) {
+                wallet.init()
+            }
+
+            this.pubKey = wallet.getPubKey()
         },
         components: {'Conversations': Conversations}
     };

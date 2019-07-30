@@ -1,8 +1,7 @@
 import Vue from "nativescript-vue";
-
 import Home from "./components/Home";
 
-Vue.config.silent = false;
+// Vue.config.silent = false;
 
 new Vue({
 
