@@ -24,13 +24,29 @@ class Wallet {
             key: "HDPrivKey",
             value: HDPrivKey.toString()
         })
+        this.HDPrivKey = HDPrivKey
         console.log('Initialized wallet')
+    }
+
+    getAddress() {
+        const pubKey = this.getPubKey()
+        if (pubKey) {
+            return bsv.Address.fromPublicKey(pubKey)
+        }
+    }
+
+    getAddressString() {
+        const address = this.getAddress()
+        if (address) {
+            return address.toString()
+        }
+        return ''
     }
 
     getPubKey() {
         if (this.HDPrivKey) {
             var HDPubKey = bsv.HDPublicKey.fromHDPrivateKey(this.HDPrivKey)
-            return HDPubKey.publicKey.toString()
+            return HDPubKey.publicKey
         }
     }
 }

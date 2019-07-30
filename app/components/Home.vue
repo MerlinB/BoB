@@ -2,7 +2,7 @@
     <Page class="page">
         <ActionBar class="action-bar">
             <Label class="action-bar-title" text="BOB"></Label>
-            <ActionItem @tap="showAddress"
+            <ActionItem @tap="$navigateTo(Profile)"
                 ios.systemIcon="16" ios.position="right"
                 text="Show Address" android.position="popup"></ActionItem>
         </ActionBar>
@@ -13,31 +13,21 @@
 </template>
 
 <script>
-    import Conversations from "./Conversations";
+    import Conversations from "./Conversations"
+    import Profile from "./Profile"
     import wallet from '../wallet'
 
 
     export default {
         data() {
             return {
-                pubKey: ''
-            }
-        },
-        methods: {
-            showAddress() {
-                alert({
-                    title: "Address",
-                    message: wallet.getPubKey(),
-                });
+                Profile: Profile
             }
         },
         created() {
-
             if (!wallet.HDPrivKey) {
                 wallet.init()
             }
-
-            this.pubKey = wallet.getPubKey()
         },
         components: {'Conversations': Conversations}
     };
